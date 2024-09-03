@@ -1,0 +1,138 @@
+﻿@using PrayasModels
+@model IEnumerable<PrayasModels.InstanceCBRptModel>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <p>
+        <a> Welcome : @ViewData["Message"]  </a>
+    </p>
+    <p>
+        <a> EmployeeID : @ViewData["ID"]  </a>
+    </p>
+    <p>
+        <a> Designation : @ViewData["desig"]  </a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ZoneName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.State)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Region)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Area)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UnitName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Branch_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BRANCHNAME)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ClientID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ClientCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ClientName)
+                </th>
+      @*           <th>
+                    @Html.DisplayNameFor(model => model.JoinDate)
+                </th> *@
+                <th>
+                    @Html.DisplayNameFor(model => model.TargetID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Final_Ineligible)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateCreated)
+                </th>
+                @*   <th></th> *@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (InstanceCBRptModel item in ViewBag.List)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ZoneName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.State)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Region)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Area)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UnitName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Branch_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BRANCHNAME)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClientID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClientCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClientName)
+                    </td>
+        @*             <td>
+                        @Html.DisplayFor(modelItem => item.JoinDate)
+                    </td> *@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TargetID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Final_Ineligible)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateCreated)
+                    </td>
+                    @*  <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td> *@
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

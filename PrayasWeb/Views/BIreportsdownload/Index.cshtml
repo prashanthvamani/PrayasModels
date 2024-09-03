@@ -1,0 +1,311 @@
+﻿@using PrayasModels
+@model IEnumerable<PrayasModels.TwoWheelerModel>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+  @*   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> *@
+
+    <script src="~/jquery/jquery.js"></script>
+    <script src="~/jquery/jquery.min.js"></script>
+
+    <script src="~/js/site.js"></script>
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/datepicker.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap/dist/js/bootstrap-datepicker.js"></script>
+
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#country").change(function () {
+                
+                debugger;
+
+                var region = $("#country option:selected").text();
+
+                $("#State").empty();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("getstate")',
+
+                    dataType: 'json',
+
+                    /*$(this).Text()*/
+
+                    data: { value: $("#country").val() },
+
+                    //data: { value: region },
+
+                    
+
+                    success: function (states) 
+                    {
+
+                        $.each(states, function (i, state) 
+                        {
+                            $("#State").append('<option value="' + state.value + '">' + state.text + '</option>');
+
+                            // $("#State").append('<option value="' + state.Text + '">' +
+                            //    state.Value   + '</option>');
+
+                        });
+                    },
+                    error: function (ex) 
+                    {
+                        alert('Failed to retrieve states.' + ex);
+                    }
+                });
+                return false;
+            })
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            $("#Index").click(function () 
+            {
+                debugger;
+
+                //alert("HI");
+
+                //if ($("#country").val() != "" && $("#State").val() != "" && $("#city").val() != "")
+                //{
+                var message = "Country: " + $("#country option:selected").text();
+                message += "\nState: " + $("#State option:selected").text();
+                //message += "\nCity: " + $("#city option:selected").text();
+                //alert(message);
+                //}
+            });
+        });
+    </script>
+
+
+
+
+</head>
+<body>
+
+    <br />
+    @using (Html.BeginForm("Index", "BIreportsdownload", FormMethod.Post))
+    {
+        <div class="container text-center">
+            <div class="row justify-content-md-center">
+                <div class="col-auto">
+                    <label for="Select Zone"> Select Zone </label>
+
+                    @* @Html.DropDownList("country", new SelectList(TempData["List"] as List<BIReportsListModel>, "ReportName", "ReportName"), "Choose Report") *@
+
+                    @Html.DropDownList("country", ViewBag.country as List<SelectListItem>, "--Select Zone--", new { style = "width: 200px;" })
+
+                    @* @Html.Hidden("country", null, new { @id = "hfZone" }) *@
+                </div>
+
+                <div class="col-auto">
+                    <label for="Select Region"> Select Region </label>
+
+                    @* @Html.DropDownList("State", new SelectList(string.Empty, "SubReportName", "SubReportName"), "Choose Report", new { style = "width:200px" }) *@
+
+                    @Html.DropDownList("State", new SelectList(string.Empty, "Value", "Text"), "--Select Region--", new { style = "width:200px" })
+
+                </div>
+                <div class="col-auto">
+                    @* <label for="dt1" class="visually-hidden">Start Date</label>
+                    <input type="text" class="form-control" id="dt1" placeholder="Date"> *@
+
+                    <div class="col-auto">
+                        <button type="Submit" class="btn btn-success mb-3" id="Index">Export to Excel</button>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                   <p>
+                  
+                   </p>@TempData["Count"]
+                </div>
+            </div>
+        </div>
+
+
+
+    }
+
+</body>
+</html>
+
+@* 
+using System;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Collections.Generic;
+using Cascading_DropDownList_MVC.Models;
+using System.Data;
+
+namespace Cascading_DropDownList_MVC.Controllers
+{
+    public class HomeController : Controller
+    {
+        // GET: Home
+        //public ActionResult Index()
+        //{
+        //    CascadingModel model = new CascadingModel();
+        //    model.Zones = PopulateDropDown("SELECT CountryId, CountryName FROM Countries", "CountryName", "CountryId");
+        //    return View(model);
+        //}
+
+
+        public ActionResult Index()
+        {
+            CascadingModel model = new CascadingModel();
+            //, "CountryId"
+            model.Zone = PopulateDropDown("select Distinct ZoneName  from AR_ActiveBranchList where ZoneName IS NOT NULL", "ZoneName");
+            return View(model);
+        }
+
+        //[HttpPost]
+        //public JsonResult AjaxMethod(string type, int value)
+        //{
+        //    CascadingModel model = new CascadingModel();
+        //    switch (type)
+        //    {
+        //        case "CountryId":
+        //            model.Regions = PopulateDropDown("SELECT StateId, StateName FROM States WHERE CountryId = " + value, "StateName", "StateId");
+        //            break;
+        //        case "StateId":
+        //            model.Area = PopulateDropDown("SELECT CityId, CityName FROM Cities  WHERE StateId = " + value, "CityName", "CityId");
+        //            break;
+        //    }
+        //    return Json(model);
+        //}
+
+        [HttpPost]
+        public JsonResult AjaxMethod(string type, string value)
+        {
+            CascadingModel model = new CascadingModel();
+            switch (type)
+            {
+                case "ZoneName":
+                    model.Region = PopulateDropDown("select Distinct Region from AR_ActiveBranchList where ZoneName= " + value, "Region");
+                    break;
+                case "Region":
+                    model.Area = PopulateDropDown("select DIstinct Area  from AR_ActiveBranchList where Region= " + value, "Area");
+                    break;
+            }
+            return Json(model);
+        }
+
+        //[HttpPost]
+        //public ActionResult Index(string Zone, string region, string area)
+        //{
+        //    CascadingModel model = new CascadingModel();
+        //    model.Zones = PopulateDropDown("SELECT CountryId, CountryName FROM Countries", "CountryName", "CountryId");
+        //    model.Regions = PopulateDropDown("SELECT StateId, StateName FROM States WHERE CountryId = " + Zone, "StateName", "StateId");
+        //    model.Area = PopulateDropDown("SELECT CityId, CityName FROM Cities WHERE StateId = " + region, "CityName", "CityID");
+        //    return View(model);
+        //}
+
+
+
+        [HttpPost]
+        public ActionResult Index(string ZONE, string REGION, int cityId)
+        {
+            CascadingModel model = new CascadingModel();
+            //, "CountryId"
+            model.Zone = PopulateDropDown("select Distinct ZoneName  from AR_ActiveBranchList where ZoneName IS NOT NULL", "ZoneName");
+            //, "StateId"
+            model.Region = PopulateDropDown("select Distinct Region from AR_ActiveBranchList where ZoneName = " + REGION, "Region");
+            //, "CityID"
+            model.Area = PopulateDropDown("select DIstinct Area  from AR_ActiveBranchList where Region=" + REGION, "Area");
+
+            return View(model);
+        }
+
+        //, string valueColumn
+        private static List<SelectListItem>
+    PopulateDropDown(string query, string textColumn)
+    {
+    List<SelectListItem>
+        items = new List<SelectListItem>
+            ();
+            string constr = ConfigurationManager.ConnectionStrings["Constring"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+            using (SqlCommand cmd = new SqlCommand(query))
+            {
+            cmd.Connection = con;
+            con.Open();
+            using (SqlDataReader sdr = cmd.ExecuteReader())
+            {
+            while (sdr.Read())
+            {
+            items.Add(new SelectListItem
+            {
+            Text = sdr[textColumn].ToString(),
+            //Value = sdr[valueColumn].ToString()
+            });
+            }
+            }
+            con.Close();
+            }
+            }
+
+            return items;
+            }
+
+
+
+            //private static List<SelectListItem>
+                PopulateDropDown(string query, string textColumn, string valueColumn)
+                //{
+                //    List<SelectListItem>
+                    items = new List<SelectListItem>
+                        ();
+                        //    string constr = ConfigurationManager.ConnectionStrings["Constring"].ConnectionString;
+                        //    using (SqlConnection con = new SqlConnection(constr))
+                        //    {
+                        //        using (SqlCommand cmd = new SqlCommand(query))
+                        //        {
+                        //            cmd.Connection = con;
+                        //            con.Open();
+                        //            using (SqlDataReader sdr = cmd.ExecuteReader())
+                        //            {
+                        //                while (sdr.Read())
+                        //                {
+                        //                    items.Add(new SelectListItem
+                        //                    {
+                        //                        Text = sdr[textColumn].ToString(),
+                        //                        Value = sdr[valueColumn].ToString()
+                        //                    });
+                        //                }
+                        //            }
+                        //            con.Close();
+                        //        }
+                        //    }
+
+                        //    return items;
+                        //}
+                        }
+                        }
+ *@

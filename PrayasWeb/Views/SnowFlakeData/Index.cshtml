@@ -1,0 +1,135 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/datepicker.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap/dist/js/bootstrap-datepicker.js"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            //debugger;
+            $("#ddlZone").change(function () {
+                var text = $("#ddlZone").find("option:selected").text();
+
+                //alert(text);
+
+                // debugger;
+                if (text == "South Zone") {
+
+                    $("#dvDissolvedBranchlist").show();
+                    $("#dvTTum").hide();
+                }
+                else if (text == "North Zone") {
+
+                    $("#dvTTum").show();
+                    $("#dvDissolvedBranchlist").hide();
+                }
+
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            // Disable back date and start from Current Date
+            // var date = new Date();
+            // date.setDate(date.getDate() - 1);
+
+            $('#dt1').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                format: "dd-mm-yyyy",
+                language: "tr",
+                endDate: '+0d',
+                todayHighlight: true,
+                // startDate: date
+
+            });
+
+            $('#ttumSD').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                format: "dd-mm-yyyy",
+                language: "tr",
+                endDate: '+0d',
+
+            });
+
+            $('#ttumED').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                format: "dd-mm-yyyy",
+                language: "tr",
+                endDate: '+0d',
+
+            });
+
+        });
+    </script>
+
+
+</head>
+<body>
+
+    @using (Html.BeginForm("Submit", "SnowFlakeData", FormMethod.Post))
+    {
+        <label for="startDate" style="color:mediumvioletred">Select :</label>
+
+        @Html.DropDownList("Zone", new SelectList(ViewBag.list, "Zone", "Zone"), "Please select", new { @id = "ddlZone" })
+
+        @Html.Hidden("Zone", null, new { @id = "hfZone" })
+        <input type="submit" value="Submit" class="form-control w-25 btn btn-sm btn-danger" style="width:10%" />
+
+        <label asp-controller="SnowFlakeData" asp-action="Index"> @Context.Session.GetString("username")></label>
+
+        <div class="row mt-5 ml-5" id="divData"></div>
+
+        <div id="dvDissolvedBranchlist" style="display:none;">
+            Dissolved BranchList:
+            <label for="startDate" style="color:mediumvioletred">StartDate:</label>
+            <br />
+            <input type="text" name="Start" class="form-control" id="dt1" style="width:12%" />
+            <br />
+
+        </div>
+        <div id="dvTTum" style="display: none">
+            TTUM Generated:
+
+            <label for="startDate" style="color:mediumvioletred">StartDate:</label>
+            <br />
+            <input type="text" name="StartDateTime" class="form-control" id="ttumSD" style="width:12%" />
+            <br />
+
+            <input type="text" name="EndDateTime" class="form-control" id="ttumED" style="width:12%" />
+            <br />
+            Selected Text: <label id="lbltxtTtum"></label><br /><br />
+            <br />
+
+        </div>
+
+    }
+
+    @if (ViewBag.Zoncevalue != null)
+    {
+        <script type="text/javascript">
+            $(function () {
+                $("#divData").empty().html('@ViewBag.Zoncevalue');
+            });
+        </script>
+    }
+
+</body>
+</html>

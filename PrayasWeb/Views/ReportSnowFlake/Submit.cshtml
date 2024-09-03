@@ -1,0 +1,186 @@
+﻿@using PrayasModels
+@model IEnumerable<PrayasModels.SnowFlakeRpt>
+
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Submit</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/datepicker.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap/dist/js/bootstrap-datepicker.js"></script>
+
+
+
+
+    <script type="text/javascript">
+        $(function () {
+
+            // Disable back date and start from Current Date
+            // var date = new Date();
+            // date.setDate(date.getDate() - 1);
+
+            $('#dt1').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                format: "dd-mm-yyyy",
+                language: "tr",
+                endDate: '+0d',
+                todayHighlight: true,
+                // startDate: date
+
+            });
+        });
+    </script>
+
+
+    <script type="text/javascript">
+
+        $(function () {
+            //debugger;
+            $("#ddlZone").change(function () {
+                var text = $("#ddlZone").find("option:selected").text();
+
+                alert(text);
+            });
+        });
+    </script>
+
+    @if (ViewData["Selected"] != null)
+    {
+        <script type="text/javascript">
+            $(function () {
+                alert("ViewData["Selected"]");
+            @* var sel = $("#ddlZone").val("@ViewData["Selected"]"); *@
+            @* alert(sel); *@
+
+                                                            });
+        </script>
+    }
+
+</head>
+<body>
+    @*     <p>
+    <a asp-action="Create">Create New</a>
+    </p> *@
+    @using (Html.BeginForm("Submit", "ReportSnowFlake", FormMethod.Post))
+    {
+        <div class="container text-center">
+            <div class="row justify-content-md-center">
+                <div class="col-auto">
+                    <label for="Select Zone"> Select Zone </label>
+                    @Html.DropDownList("Zone", new SelectList(TempData["List"] as List<SnowFlakeRpt>, "ZONE", "ZONE"), "Choose Zone", new { @id = "ddlZone" })
+
+                    @Html.Hidden("Zone", null, new { @id = "hfZone" })
+                </div>
+
+
+
+
+                <div class="col-auto">
+                    <label for="dt1" class="visually-hidden">Start Date</label>
+                    <input type="text" class="form-control" id="dt1" placeholder="Date">
+                </div>
+                <div class="col-auto">
+                    <button type="Submit" class="btn btn-primary mb-3" id="Submit">Submit</button>
+                </div>
+                <div class="col-auto">
+                    <button type="Submit" class="btn btn-success mb-3" id="Excel">Export to Excel</button>
+                </div>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="col-auto">
+                    <label asp-controller="SnowFlakeData" asp-action="Index"> @Context.Session.GetString("username")</label>
+                </div>
+            </div>
+        </div>
+
+        @if (ViewBag.Data != null)
+        {
+            <div class="container table-responsive py-5" id="datatable">
+                <table class="table table-bordered table-hover table-responsive-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.BranchID)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.BRANCHNAME)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.BRANCHINCEPTION)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.BRANCHSTATUS)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ZONE)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.REGION)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AREA)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.STATE)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DISTRICT)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PINCODE)
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (SnowFlakeRpt employee in ViewBag.Data)
+                        {
+                            <tr>
+                                <td>
+                                    @employee.BranchID
+                                </td>
+                                <td>
+                                    @employee.BRANCHNAME
+                                </td>
+                                <td>
+                                    @employee.BRANCHINCEPTION
+                                </td>
+                                <td>
+                                    @employee.BRANCHSTATUS
+                                </td>
+                                <td>
+                                    @employee.ZONE
+                                </td>
+                                <td>
+                                    @employee.REGION
+                                </td>
+                                <td>
+                                    @employee.AREA
+                                </td>
+                                <td>
+                                    @employee.STATE
+                                </td>
+                                <td>
+                                    @employee.DISTRICT
+                                </td>
+                                <td>
+                                    @employee.PINCODE
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    }
+
+
+</body>
+</html>

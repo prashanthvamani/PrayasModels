@@ -1,0 +1,163 @@
+﻿@model IEnumerable<PrayasModels.SnowFlakeRpt>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/datepicker.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap/dist/js/bootstrap-datepicker.js"></script>
+
+     <script type="text/javascript">
+         $(function () 
+         {
+
+             // Disable back date and start from Current Date
+             // var date = new Date();
+             // date.setDate(date.getDate() - 1);
+
+             $('#dt1').datepicker({
+                 changeMonth: true,
+                 changeYear: true,
+                 format: "dd-mm-yyyy",
+                 language: "tr",
+                 endDate: '+0d',
+                 todayHighlight: true,
+                 // startDate: date
+
+             });
+         });
+         </script>
+        
+
+</head>
+<body>
+    @* <p>
+    <a asp-action="Create">Create New</a>
+    </p> *@
+
+    <br />
+    <div class="row">
+        @using (Html.BeginForm("Submit", "ReportSnowFlake", FormMethod.Post))
+        {
+            <div id="dvDissolvedBranchlist">
+            <label for="startDate" style="color:mediumvioletred">Select :</label>
+
+            @Html.DropDownList("Zone", new SelectList(ViewBag.list, "ZONE", "ZONE"), "Please select", new { @id = "ddlZone" })
+
+            @Html.Hidden("Zone", null, new { @id = "hfZone" })
+
+
+           <br />
+                <label for="startDate" style="color:mediumvioletred">StartDate:</label>
+
+                <input type="text" name="Start" class="form-control" id="dt1" style="width:12%" />
+                <br />
+
+            </div>
+
+            <input type="submit" value="Submit" class="form-control w-25 btn btn-sm btn-danger" style="width:5%" />
+
+            
+        }
+    </div>
+
+    <div class="container table-responsive py-5" style="display:none">
+        <table class="table table table-bordered table-hover table-responsive-sm" style="width:20%" >
+            <thead class="table-primary">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BranchID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BRANCHNAME)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BRANCHINCEPTION)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BRANCHSTATUS)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ZONE)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.REGION)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AREA)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.STATE)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DISTRICT)
+                    </th>
+                    @*                     <th>
+                    @Html.DisplayNameFor(model => model.UMBASELOCATIONBRANCHID)
+                    </th>
+                    <th>
+                    @Html.DisplayNameFor(model => model.UMBASELOCATIONBRANCHName)
+                    </th> *@
+                    <th>
+                        @Html.DisplayNameFor(model => model.PINCODE)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BranchID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BRANCHNAME)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BRANCHINCEPTION)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BRANCHSTATUS)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ZONE)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.REGION)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AREA)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.STATE)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DISTRICT)
+                        </td>
+                        @*                         <td>
+                    @Html.DisplayFor(modelItem => item.UMBASELOCATIONBRANCHID)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.UMBASELOCATIONBRANCHName)
+                    </td> *@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PINCODE)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
