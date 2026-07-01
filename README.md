@@ -4,7 +4,7 @@ The business problem was that over 20,000 field staff across India needed access
 
 Technologies: ASP.NET Core 8, MVC, REST APIs, ADO.NET , SQL Server, jQuery, Ajax, and Bootstrap, deployed on Azure App Services.
 
-Featues : since 20,000+ users from different branches, regions, and roles were accessing the same portal, I implemented row-level security so each user could only see data within their own operational boundary. Not a single user could access another branch's data.
+Features: : since 20,000+ users from different branches, regions, and roles were accessing the same portal, I implemented row-level security so each user could only see data within their own operational boundary. Not a single user could access another branch's data.
 
 I set up a full CI/CD pipeline using GitHub Actions with separate DEV and PROD stages and a manual approval gate before every production release
 
